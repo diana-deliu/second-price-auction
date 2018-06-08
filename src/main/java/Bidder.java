@@ -6,11 +6,9 @@ import java.util.List;
  */
 public class Bidder {
 
-    public String name;
-    public int maximumBiddingPrice;
-    public int winnerPrice;
-    public boolean isWinner;
-    public List<Integer> biddingPrices;
+    private String name;
+    private int maximumBiddingPrice;
+    private List<Integer> biddingPrices;
 
     public Bidder(String name, List<Integer> biddingPrices) {
         this.name = name;
@@ -28,34 +26,6 @@ public class Bidder {
 
     public int getMaximumBiddingPrice() {
         return maximumBiddingPrice;
-    }
-
-    public void setMaximumBiddingPrice(int maximumBiddingPrice) {
-        this.maximumBiddingPrice = maximumBiddingPrice;
-    }
-
-    public int getWinnerPrice() {
-        return winnerPrice;
-    }
-
-    public void setWinnerPrice(int winnerPrice) {
-        this.winnerPrice = winnerPrice;
-    }
-
-    public boolean isWinner() {
-        return isWinner;
-    }
-
-    public void setWinner(boolean winner) {
-        isWinner = winner;
-    }
-
-    public List<Integer> getBiddingPrices() {
-        return biddingPrices;
-    }
-
-    public void setBiddingPrices(List<Integer> biddingPrices) {
-        this.biddingPrices = biddingPrices;
     }
 
     @Override

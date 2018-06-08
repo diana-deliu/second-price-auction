@@ -1,56 +1,39 @@
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by Diahne on 08.06.2018.
  */
 public class Auction {
-    public List<Bidder> biddersList;
-    public int winningPrice;
-    public int reservePrice;
-    public Bidder winningBidder;
 
-    public Auction(List<Bidder> biddersList) {
-        this.biddersList = biddersList;
-    }
+    private List<Bidder> biddersList;
+    private int reservePrice;
 
-    public List<Bidder> getBiddersList() {
-        return biddersList;
+    public Auction() {
     }
 
     public void setBiddersList(List<Bidder> biddersList) {
         this.biddersList = biddersList;
     }
 
-    public int getWinningPrice() {
-        return winningPrice;
-    }
-
-    public void setWinningPrice(int winningPrice) {
-        this.winningPrice = winningPrice;
-    }
-
-    public Bidder getWinningBidder() {
-        return winningBidder;
-    }
-
-    public int getReservePrice() {
-        return reservePrice;
-    }
-
     public void setReservePrice(int reservePrice) {
         this.reservePrice = reservePrice;
     }
 
-    public void setWinningBidder(Bidder winningBidder) {
-        this.winningBidder = winningBidder;
-    }
+    public AuctionResult computeWinner() {
+        Collections.sort(biddersList, new BidderComparator());
 
-    @Override
-    public String toString() {
-        return "Auction conclusions are: \n" +
-                "The winner of the bidding is " + winningBidder +
-                " with the winner price of " + winningPrice +
-                '.';
+        Bidder winner = biddersList.get(0);
+        int winningPrice;
+
+        if (winner.getMaximumBiddingPrice() < reservePrice) {
+            winner.setName("nobody");
+            winningPrice = reservePrice;
+        } else {
+            winningPrice = biddersList.get(1).getMaximumBiddingPrice();
+        }
+
+        return new AuctionResult(winner, winningPrice);
     }
 }
 
