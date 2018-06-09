@@ -1,0 +1,4 @@
+START[150]
+A[abracadabra]
+B[170, 130]
+C[ceapa]

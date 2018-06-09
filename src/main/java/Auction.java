@@ -3,29 +3,29 @@ import java.util.List;
 
 /**
  * Created by Diahne on 08.06.2018.
+ * Auction class
  */
-public class Auction {
+class Auction {
 
     private List<Bidder> biddersList;
     private int reservePrice;
 
-    public Auction() {
+    Auction() {
     }
 
-    public void setBiddersList(List<Bidder> biddersList) {
+    void setBiddersList(List<Bidder> biddersList) {
         this.biddersList = biddersList;
     }
 
-    public void setReservePrice(int reservePrice) {
+    void setReservePrice(int reservePrice) {
         this.reservePrice = reservePrice;
     }
 
-    public AuctionResult computeWinner() {
+    AuctionResult computeWinner() {
         Collections.sort(biddersList, new BidderComparator());
-
         Bidder winner = biddersList.get(0);
-        int winningPrice;
 
+        int winningPrice;
         if (winner.getMaximumBiddingPrice() < reservePrice) {
             winner.setName("nobody");
             winningPrice = reservePrice;

@@ -1,0 +1,5 @@
+START[0]
+maricica[250000, 25, 60]
+dorinelia[111, 15]
+latrau[45000, 100000, 0]
+purcel[2000000]

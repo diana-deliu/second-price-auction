@@ -1,0 +1,6 @@
+START[0]
+gigel[2, 25, 60]
+purcel[111, 15, 6]
+catel[45000, 100000, 0]
+ionel[]
+vitel[5000000]

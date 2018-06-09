@@ -1,0 +1,5 @@
+START[150]
+galusca[100, 150, 160]
+galusca[170, 130]
+galusca[170, 130]
+galusca[170, 130]

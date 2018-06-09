@@ -3,14 +3,18 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Diahne on 08.06.2018.
+ * Transforms data from input file to Auction
  */
 public class AuctionInputReader implements Transformer<String, Auction> {
 
     private String firstLine;
+    private Set<String> biddersNames = new HashSet<String>();
 
     private List<String> readAllInputLines(String fileInputPath) throws AuctionException {
         List<String> lines = new ArrayList<String>();
@@ -47,11 +51,7 @@ public class AuctionInputReader implements Transformer<String, Auction> {
         List<String> lines = readAllInputLines(fileInputPath);
         List<Bidder> biddersList = new ArrayList<Bidder>();
         for (int i = 0; i < lines.size(); i++) {
-            try {
-                biddersList.add(parseBidderDetailFromLine(lines.get(i), i));
-            } catch (AuctionException e) {
-                e.printStackTrace();
-            }
+            biddersList.add(parseBidderDetailFromLine(lines.get(i), i));
         }
         auction.setBiddersList(biddersList);
         auction.setReservePrice(parseReservePrice(firstLine));
@@ -65,27 +65,33 @@ public class AuctionInputReader implements Transformer<String, Auction> {
     private List<Integer> parseBiddingPricesForABidder(String bidderPrices) {
         String[] biddingPrices = bidderPrices.split(",");
         List<Integer> biddingPricesList = new ArrayList<Integer>();
-        for (int i = 0; i < biddingPrices.length; i++) {
-            biddingPricesList.add(Integer.parseInt(biddingPrices[i].trim()));
+        for (String biddingPrice : biddingPrices) {
+            if (!biddingPrice.trim().equals("")) {
+                biddingPricesList.add(Integer.parseInt(biddingPrice.trim()));
+            }
         }
         return biddingPricesList;
     }
 
     private Bidder parseBidderDetailFromLine(String line, int i) throws AuctionException {
-        if (line == null || line.isEmpty()) {
-            throw new AuctionException("Line " + i + " is empty!");
-        } else if (!line.contains("[") || !line.contains("]")) {
+        if (!line.contains("[") || !line.contains("]")) {
             throw new AuctionException("One or both box brackets on line " + i + " is missing!");
-        } else if (!line.substring(line.indexOf('[') + 1, line.indexOf(']')).matches("[0-9]+(, [0-9]+)*")) {
-            throw new AuctionException("Bidder prices on line " + i + " are not valid!");
-        } else if (!line.substring(0, line.indexOf('[')).matches("[a-zA-z]")) {
-            throw new AuctionException("Bidder Name on line " + i + " is missing or is not valid");
         }
-        return new Bidder(line.substring(0, line.indexOf('[')),
-                parseBiddingPricesForABidder(line.substring(line.indexOf('[') + 1, line.indexOf(']'))));
+        String bidderName = line.substring(0, line.indexOf('['));
+        String biddingPricesForABidder = line.substring(line.indexOf('[') + 1, line.indexOf(']'));
+        if (!biddingPricesForABidder.matches("[0-9\\-]*(,( )*[0-9]+)*")) {
+            throw new AuctionException("Bidding prices on line " + i + " are not valid!");
+        }
+        if (!biddersNames.add(bidderName)) {
+            throw new AuctionException("Bidder name " + bidderName + " has multiple occurrences!");
+        }
+        if (!bidderName.matches("[a-zA-z]+")) {
+            throw new AuctionException("Bidder name on line " + i + " is missing or is not valid");
+        }
+        return new Bidder(bidderName, parseBiddingPricesForABidder(biddingPricesForABidder));
     }
 
-    public Auction transform(String fileInputPath) throws AuctionException{
+    public Auction transform(String fileInputPath) throws AuctionException {
         return parseAuctionDetailsFromBidders(fileInputPath);
     }
 }
