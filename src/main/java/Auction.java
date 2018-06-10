@@ -24,13 +24,14 @@ class Auction {
     AuctionResult computeWinner() {
         Collections.sort(biddersList, new BidderComparator());
         Bidder winner = biddersList.get(0);
+        int winningPrice = biddersList.get(1).getMaximumBiddingPrice();
 
-        int winningPrice;
         if (winner.getMaximumBiddingPrice() < reservePrice) {
             winner.setName("nobody");
             winningPrice = reservePrice;
-        } else {
-            winningPrice = biddersList.get(1).getMaximumBiddingPrice();
+        }
+        if (winningPrice < reservePrice) {
+            winningPrice = reservePrice;
         }
 
         return new AuctionResult(winner, winningPrice);

@@ -50,8 +50,15 @@ public class AuctionInputReader implements Transformer<String, Auction> {
         Auction auction = new Auction();
         List<String> lines = readAllInputLines(fileInputPath);
         List<Bidder> biddersList = new ArrayList<Bidder>();
+        Set<Integer> prices = new HashSet<Integer>();
         for (int i = 0; i < lines.size(); i++) {
-            biddersList.add(parseBidderDetailFromLine(lines.get(i), i));
+            Bidder bidder = parseBidderDetailFromLine(lines.get(i), i);
+            for (Integer price : bidder.getBiddingPrices()) {
+                if (!prices.add(price)) {
+                    throw new AuctionException("The same price " + price + " cannot be bid twice!");
+                }
+            }
+            biddersList.add(bidder);
         }
         auction.setBiddersList(biddersList);
         auction.setReservePrice(parseReservePrice(firstLine));
@@ -79,7 +86,7 @@ public class AuctionInputReader implements Transformer<String, Auction> {
         }
         String bidderName = line.substring(0, line.indexOf('['));
         String biddingPricesForABidder = line.substring(line.indexOf('[') + 1, line.indexOf(']'));
-        if (!biddingPricesForABidder.matches("[0-9\\-]*(,( )*[0-9]+)*")) {
+        if (!biddingPricesForABidder.matches("[0-9]*(,( )*[0-9]+)*")) {
             throw new AuctionException("Bidding prices on line " + i + " are not valid!");
         }
         if (!biddersNames.add(bidderName)) {

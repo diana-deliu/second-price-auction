@@ -38,6 +38,10 @@ public class Bidder {
         return maximumBiddingPrice;
     }
 
+    List<Integer> getBiddingPrices() {
+        return biddingPrices;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

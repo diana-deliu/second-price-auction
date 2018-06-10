@@ -91,11 +91,50 @@ public class AuctionOutputTest {
 
     @Test
     public void testAlgorithmInput7() {
-        Bidder winner = new Bidder("A");
-        int winningPrice = 800;
+        Bidder winner = new Bidder("B");
+        int winningPrice = 780;
         AuctionResult auctionResult = new AuctionResult(winner, winningPrice);
         try {
             Auction auction = auctionInputReader.transform("algorithm_test_input_files/algorithm_test_input_file_7.txt");
+            assertEquals(auctionResult, auction.computeWinner());
+        } catch (AuctionException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAlgorithmInput8() {
+        Bidder winner = new Bidder("B");
+        int winningPrice = 1000;
+        AuctionResult auctionResult = new AuctionResult(winner, winningPrice);
+        try {
+            Auction auction = auctionInputReader.transform("algorithm_test_input_files/algorithm_test_input_file_8.txt");
+            assertEquals(auctionResult, auction.computeWinner());
+        } catch (AuctionException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAlgorithmInput9() {
+        Bidder winner = new Bidder("nobody");
+        int winningPrice = 1000;
+        AuctionResult auctionResult = new AuctionResult(winner, winningPrice);
+        try {
+            Auction auction = auctionInputReader.transform("algorithm_test_input_files/algorithm_test_input_file_9.txt");
+            assertEquals(auctionResult, auction.computeWinner());
+        } catch (AuctionException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAlgorithmInput10() {
+        Bidder winner = new Bidder("C");
+        int winningPrice = 1200;
+        AuctionResult auctionResult = new AuctionResult(winner, winningPrice);
+        try {
+            Auction auction = auctionInputReader.transform("algorithm_test_input_files/algorithm_test_input_file_10.txt");
             assertEquals(auctionResult, auction.computeWinner());
         } catch (AuctionException e) {
             fail(e.getMessage());
